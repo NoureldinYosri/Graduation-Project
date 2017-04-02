@@ -28,6 +28,7 @@ dependencies/links:
 	<li> openCV  </li>
 	<ul>
 		<li> library link : https://github.com/opencv/opencv </li>
-		<li> tutorials : http://docs.opencv.org/2.4/doc/tutorials/tutorials.html </li>			
+		<li> tutorials : http://docs.opencv.org/2.4/doc/tutorials/tutorials.html </li>		
+		<li> BG-substraction Library : https://github.com/dparks1134/Background-Subtraction-Library </li>	
 	</ul>
 </ul>
