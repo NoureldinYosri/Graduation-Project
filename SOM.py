@@ -55,12 +55,11 @@ def train(path,m = 5,n = 5,nitr = 100):
     return retSOM;
 
 if __name__ == "__main__":
-    print(is_windows())
-    # mypath = join_parent("BFC VS MAG")
-    # mylogger = logger.logger(join_parent('logger'),'trying somoclu with PCA intializer');
-    # mylogger.save("object w 5las", "lolgdan")
-    # mySOM = train(mypath);
-    # mylogger.save(mySOM);
+    mypath = join_parent("BFC VS MAG")
+    mylogger = logger.logger(join_parent('logger'),'trying somoclu with PCA intializer');
+    mylogger.save("object w 5las", "lolgdan")
+    mySOM = train(mypath);
+    mylogger.save(mySOM);
     #to get neuron which a feature map to use
     #let feature descriptor be names fd
     #x = np.array(fd);
