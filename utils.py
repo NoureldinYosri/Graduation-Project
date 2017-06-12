@@ -11,3 +11,9 @@ def join(dir, sub):
 
 def is_windows():
     return platform.system() == 'Windows'
+
+def get_dirname(dirpath):
+    return os.path.basename(dirpath)
+
+def path_exists(path):
+    return os.path.exists(path)

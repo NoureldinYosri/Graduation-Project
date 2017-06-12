@@ -6,14 +6,16 @@ Created on Thu Jun  8 00:58:44 2017
 @author: noureldin
 """
 
-import os,time,joblib;
+import os,time,joblib,re;
+from utils import *
 
 class logger:
     def __init__(self,path,note = None):
         self.path = path;
-        if not path.endswith('/'): self.path += "/";
-        if note != None: self.path += note;
-        self.path += " on " + time.ctime();
+        if note != None: self.path = join(path, note);
+        self.path += " on " + str(time.ctime());
+        self.path = re.sub(r'[:*]', '-', self.path)
+        print(self.path)
         try:
             os.makedirs(self.path)
         except:
@@ -22,9 +24,8 @@ class logger:
     
     def save(self,obj,message = ""):
         self.cnt += 1;
-        joblib.dump(obj,self.path + '/' + str(self.cnt) + ".pkl");
-        f = file(self.path + '/' + "note on trial #%d.txt"%self.cnt,"w");
+        joblib.dump(obj, join(self.path, str(self.cnt) + ".pkl"));
+        file_path = join(self.path, "note on trial #%d.txt"%self.cnt)
+        f = open(file_path, "w");
         f.write(message);
         f.close();
-  
-    

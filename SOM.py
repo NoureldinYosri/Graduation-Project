@@ -3,6 +3,7 @@
 
 
 import somoclu,auxiliary,cv2,time,logger;
+from utils import *
 import numpy as np;
 
 def train(path,m = 5,n = 5,nitr = 100):
@@ -19,7 +20,7 @@ def train(path,m = 5,n = 5,nitr = 100):
     surf = cv2.xfeatures2d.SURF_create(10000)
     num_training_features = 0;
     
-    print "started extracting features";
+    print ("started extracting features");
     start_time = time.time();
     data = [];
     for image_path in image_paths:
@@ -34,27 +35,32 @@ def train(path,m = 5,n = 5,nitr = 100):
     elapsed_time = time.time() - start_time;
     minutes = elapsed_time/60;
     seconds = elapsed_time%60;
-    print "finished extracting %d features in %d min and %d seconds"%(num_training_features,minutes,seconds);
+    print ("finished extracting %d features in %d min and %d seconds"%(num_training_features,minutes,seconds));
 
     data = np.array(data);
-    print "started training SOM";
+    print ("started training SOM");
     start_time = time.time();
-    retSOM.train(data);
+    if is_windows():
+        retSOM.update_data(data);
+        retSOM.train();
+    else:
+        retSOM.train(data);
     elapsed_time = time.time() - start_time;
     minutes = elapsed_time/60;
     seconds = elapsed_time%60;
-    print "finished training on %d features in %d min and %d seconds"%(num_training_features,minutes,seconds);
+    print ("finished training on %d features in %d min and %d seconds"%(num_training_features,minutes,seconds));
     #for i in xrange(10):
     #    activation_map = retSOM.get_surface_state(data[i].reshape(1,64));
-    #    print retSOM.get_bmus(activation_map);
+    #    print (retSOM.get_bmus(activation_map));
     return retSOM;
 
-
 if __name__ == "__main__":
-    mypath = '/home/noureldin/Desktop/GP/dataset/BFC VS MAG'
-    mySOM = train(mypath);
-    mylogger = logger.logger('/home/noureldin/Desktop/workspace/logger','trying somoclu with PCA intializer');
-    mylogger.save(mySOM);
+    print(is_windows())
+    # mypath = join_parent("BFC VS MAG")
+    # mylogger = logger.logger(join_parent('logger'),'trying somoclu with PCA intializer');
+    # mylogger.save("object w 5las", "lolgdan")
+    # mySOM = train(mypath);
+    # mylogger.save(mySOM);
     #to get neuron which a feature map to use
     #let feature descriptor be names fd
     #x = np.array(fd);
