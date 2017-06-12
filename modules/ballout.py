@@ -22,8 +22,6 @@ from utils import *
 
 def read_data(path):
     """returns path X,Y of data where X[i] is an image and Y[i] is its label"""
-    if path_exists(path):
-    	raise Exception("Path doesn't exist!")
     data = {};
     val = {"no":-1,"undetermined":0,"yes":1};
     
