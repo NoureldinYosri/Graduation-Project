@@ -12,7 +12,10 @@ for (dirpath,dirnames,filenames) in os.walk(path):
 	break;
 
 lst = None;
+
 save_path = join_parent("filter_output");
+if len(sys.argv) > 3:
+	save_path = join_parent(sys.argv[3])
 make_dir(save_path)
 F.sort();
 for img_name in F:
@@ -21,9 +24,13 @@ for img_name in F:
 		lst = cv2.imread(join(path, img_name), 0);
 		cv2.imwrite(join(save_path, img_name), cv2.imread(join(path, img_name)));
 	else:
-		diff = sum(sum(abs(lst - img)));
-		siz = img.shape[0]*img.shape[1];
-		print (diff*1.0/siz);
-		if diff > threshold*siz:
+		try:
+			diff = sum(sum(abs(lst - img)));
+			siz = img.shape[0] * img.shape[1];
+			print (img_name, diff * 1.0/siz);
+			if diff > threshold * siz:
+				lst = cv2.imread(join(path, img_name), 0);
+				cv2.imwrite(join(save_path, img_name), cv2.imread(join(path, img_name)));
+		except ValueError:
 			lst = cv2.imread(join(path, img_name), 0);
-			cv2.imwrite(join(save_path, img_name), cv2.imread(join(path, img_name)));
+			continue

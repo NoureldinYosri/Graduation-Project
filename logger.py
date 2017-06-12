@@ -14,7 +14,7 @@ class logger:
         self.path = path;
         if note != None: self.path = join(path, note);
         self.path += " on " + str(time.ctime());
-        self.path = re.sub(r'[:*]', '-', self.path)
+        self.path = normalize_dir(self.path)
         print(self.path)
         try:
             os.makedirs(self.path)

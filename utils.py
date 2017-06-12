@@ -1,4 +1,4 @@
-import os,platform,shutil
+import os,platform,shutil,re
 
 def join_parent(directory, level=1):
     path = directory
@@ -25,3 +25,9 @@ def make_dir(path):
         pass
     print("creating:", path)
     os.makedirs(path)
+
+def join_list(dir_list):
+    return os.path.join(*(map(lambda x: normalize_dir(x), dir_list)))
+
+def normalize_dir(path):
+    return re.sub(r'[:*]', '-', path)

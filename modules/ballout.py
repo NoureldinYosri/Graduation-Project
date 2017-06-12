@@ -67,51 +67,56 @@ def transform_data(imgs,som,m,n):
     return X;
    
 if __name__ == "__main__":
-    mylogger = logger.logger(join_parent('logger', 2),'working on ballout with MLP and SOM is 30*30 and 5*5 hidden layer');
-    path = join_parent('BFC VS MAG', 2);
-    print ("reading data");
-    X,Y,label_sizes = read_data(path);
-    print ("done reading");
-    som = SOM.train(path,30,30);
-    X = transform_data(X,som,30,30);
-    print ("start training MLP");
-    start_time = time.time();
-    clf = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(5,5), random_state=1)
-    X_train = [];
-    X_test = [];
-    Y_train = [];
-    Y_test = [];
-    offset = 0;
-    for i in range(3):
-        x_train, x_test, y_train, y_test =  \
-                        train_test_split(X[offset:offset+label_sizes[i]], Y[offset:offset+label_sizes[i]], test_size=0.3, random_state=42)
-        X_train.extend(x_train);
-        X_test.extend(x_test);
-        Y_train.extend(y_train);
-        Y_test.extend(y_test);
-        offset += label_sizes[i];
-    X_train = np.array(X_train,dtype = np.float32);
-    X_test = np.array(X_test,dtype = np.float32);
-    Y_train = np.array(Y_train,dtype = np.float32);
-    Y_test = np.array(Y_test,dtype = np.float32);
-    clf.fit(X_train,Y_train);
-    elapsed_time = time.time() - start_time;
-    minutes = elapsed_time/60;
-    seconds = elapsed_time%60;
-    print ("finished learning in %d min and %d seconds"%(minutes,seconds));
-    train_acc = accuracy_score(Y_train, clf.predict(X_train))*100;
-    Y_predict = clf.predict(X_test);
-    test_acc = accuracy_score(Y_test, Y_predict)*100;
-    baseline_acc = sum(Y_test == 1)*100.0/len(Y_test);
-    print (Y_test[:10],Y_predict[:10]);
-    print ("training accuracy is %.10f ,test accuracy is %.10f ,baseline_acc is %.10f"%(train_acc,test_acc,baseline_acc));
-    plt.hist(np.array(clf.predict(X_test)));
-    plt.show();
-    plt.savefig('histogram.png');
-    error_matrix = [[0 for i in range(3)] for j in range(3)];
-    for i in range(3):
-        for j in range(3):
-            error_matrix[i][j] = sum(np.array(Y_test==(i-1)) * np.array(Y_predict==(j-1)));
-    print (error_matrix);
-    mylogger.save(clf,'MLP model training accuracy is %.10f ,test accuracy is %.10f ,baseline_acc is %.10f'%(train_acc,test_acc,baseline_acc) + "\n error matrix contains " + str(error_matrix) );
+	# if len(sys.argv) > 1:
+	# 	input_dir = 'goal'
+	# else:
+	# 	raise Exception("You must provide the data path as an arguement!")
+
+	mylogger = logger.logger(join_parent('logger', 2),'working on ballout with MLP and SOM is 30*30 and 5*5 hidden layer');
+	path = join_parent('goal', 2);
+	print ("reading data");
+	X,Y,label_sizes = read_data(path);
+	print ("done reading");
+	som = SOM.train(path,30,30);
+	X = transform_data(X,som,30,30);
+	print ("start training MLP");
+	start_time = time.time();
+	clf = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(5,5), random_state=1)
+	X_train = [];
+	X_test = [];
+	Y_train = [];
+	Y_test = [];
+	offset = 0;
+	for i in range(3):
+		x_train, x_test, y_train, y_test =  \
+									train_test_split(X[offset:offset+label_sizes[i]], Y[offset:offset+label_sizes[i]], test_size=0.3, random_state=42)
+		X_train.extend(x_train);
+		X_test.extend(x_test);
+		Y_train.extend(y_train);
+		Y_test.extend(y_test);
+		offset += label_sizes[i];
+	X_train = np.array(X_train,dtype = np.float32);
+	X_test = np.array(X_test,dtype = np.float32);
+	Y_train = np.array(Y_train,dtype = np.float32);
+	Y_test = np.array(Y_test,dtype = np.float32);
+	clf.fit(X_train,Y_train);
+	elapsed_time = time.time() - start_time;
+	minutes = elapsed_time/60;
+	seconds = elapsed_time%60;
+	print ("finished learning in %d min and %d seconds"%(minutes,seconds));
+	train_acc = accuracy_score(Y_train, clf.predict(X_train))*100;
+	Y_predict = clf.predict(X_test);
+	test_acc = accuracy_score(Y_test, Y_predict)*100;
+	baseline_acc = sum(Y_test == 1)*100.0/len(Y_test);
+	print (Y_test[:10],Y_predict[:10]);
+	print ("training accuracy is %.10f ,test accuracy is %.10f ,baseline_acc is %.10f"%(train_acc,test_acc,baseline_acc));
+	plt.hist(np.array(clf.predict(X_test)));
+	plt.show();
+	# plt.savefig('histogram.png');
+	error_matrix = [[0 for i in range(3)] for j in range(3)];
+	for i in range(3):
+		for j in range(3):
+			error_matrix[i][j] = sum(np.array(Y_test==(i-1)) * np.array(Y_predict==(j-1)));
+	print (error_matrix);
+	mylogger.save(clf,'MLP model training accuracy is %.10f ,test accuracy is %.10f ,baseline_acc is %.10f'%(train_acc,test_acc,baseline_acc) + "\n error matrix contains " + str(error_matrix) );
     
