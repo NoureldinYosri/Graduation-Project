@@ -11,11 +11,7 @@ def get_images(path, k):
 	return list[0::(k+1)]
 
 def write_images(images, output_dir):
-	try:
-		shutil.rmtree(output_dir)
-	except OSError:
-		pass
-	os.makedirs(output_dir)
+	make_dir(output_dir)
 	for i, image in enumerate(images):
 		shutil.copy(image, output_dir)
 

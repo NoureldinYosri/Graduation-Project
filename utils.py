@@ -1,4 +1,4 @@
-import os,platform
+import os,platform,shutil
 
 def join_parent(directory, level=1):
     path = directory
@@ -17,3 +17,11 @@ def get_dirname(dirpath):
 
 def path_exists(path):
     return os.path.exists(path)
+
+def make_dir(path):
+    try:
+        shutil.rmtree(path)
+    except FileNotFoundError:
+        pass
+    print("creating:", path)
+    os.makedirs(path)
