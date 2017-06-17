@@ -12,10 +12,11 @@ from utils import *
 class logger:
     def __init__(self,path,note = None):
         self.path = path;
-        if note != None: self.path = join(path, note);
-        self.path += " on " + str(time.ctime());
+        folder_name = "on " + str(time.ctime());
+        if note != None: folder_name += " " + note;
+        self.path = join(path,folder_name);
         self.path = normalize_dir(self.path)
-        print(self.path)
+#        print(self.path)
         try:
             os.makedirs(self.path)
         except:

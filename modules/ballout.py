@@ -6,7 +6,7 @@ Created on Mon May 29 17:25:20 2017
 @author: noureldin
 """
 
-import tensorflow as tf
+#import tensorflow as tf
 import cv2,time,sys
 from os import walk
 import numpy as np
@@ -18,15 +18,16 @@ import matplotlib.pylab as plt;
 
 sys.path.insert(0, '../')
 import logger,SOM;
-from utils import *
+import utils;
 
 def read_data(path):
     """returns path X,Y of data where X[i] is an image and Y[i] is its label"""
     data = {};
     val = {"no":-1,"undetermined":0,"yes":1};
-    
+    print ("started reading data");
+    start_time = time.time();
     for (dirpath, dirnames, filenames) in walk(path):
-    	label = get_dirname(dirpath)
+    	label = utils.get_dirname(dirpath)
     	if label not in ["no","yes","undetermined"]: 
     		continue;
     	data[label] = filenames;
@@ -40,11 +41,15 @@ def read_data(path):
             X.append(cv2.imread(path_to_img,0));
             Y.append(val[label]);
             cnt[val[label]+1] += 1;
+    elapsed_time = time.time() - start_time;
+    minutes = elapsed_time/60;
+    seconds = elapsed_time%60;
+    print ("finished reading data in %d min and %d seconds"%(minutes,seconds));
     X = np.array(X);
     Y = np.array(Y);
-    return X,Y,cnt;
+    return X,Y;
 
-def transform_data(imgs,som,m,n):
+def transform_data(imgs,Y,som,m,n,mylogger):
     X = [];
     surf = cv2.xfeatures2d.SURF_create(10000)
     print ("started transforming data");
@@ -64,59 +69,63 @@ def transform_data(imgs,som,m,n):
     minutes = elapsed_time/60;
     seconds = elapsed_time%60;
     print ("finished transforming %d features in %d min and %d seconds"%(cnt,minutes,seconds));
+    mylogger.save(X,'transofrmed images');
+    mylogger.save(Y,'labels');
     return X;
-   
-if __name__ == "__main__":
-	# if len(sys.argv) > 1:
-	# 	input_dir = 'goal'
-	# else:
-	# 	raise Exception("You must provide the data path as an arguement!")
 
-	mylogger = logger.logger(join_parent('logger', 2),'working on ballout with MLP and SOM is 30*30 and 5*5 hidden layer');
-	path = join_parent('goal', 2);
-	print ("reading data");
-	X,Y,label_sizes = read_data(path);
-	print ("done reading");
-	som = SOM.train(path,30,30);
-	X = transform_data(X,som,30,30);
-	print ("start training MLP");
-	start_time = time.time();
-	clf = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(5,5), random_state=1)
-	X_train = [];
-	X_test = [];
-	Y_train = [];
-	Y_test = [];
-	offset = 0;
-	for i in range(3):
-		x_train, x_test, y_train, y_test =  \
-									train_test_split(X[offset:offset+label_sizes[i]], Y[offset:offset+label_sizes[i]], test_size=0.3, random_state=42)
-		X_train.extend(x_train);
-		X_test.extend(x_test);
-		Y_train.extend(y_train);
-		Y_test.extend(y_test);
-		offset += label_sizes[i];
-	X_train = np.array(X_train,dtype = np.float32);
-	X_test = np.array(X_test,dtype = np.float32);
-	Y_train = np.array(Y_train,dtype = np.float32);
-	Y_test = np.array(Y_test,dtype = np.float32);
-	clf.fit(X_train,Y_train);
-	elapsed_time = time.time() - start_time;
-	minutes = elapsed_time/60;
-	seconds = elapsed_time%60;
-	print ("finished learning in %d min and %d seconds"%(minutes,seconds));
-	train_acc = accuracy_score(Y_train, clf.predict(X_train))*100;
-	Y_predict = clf.predict(X_test);
-	test_acc = accuracy_score(Y_test, Y_predict)*100;
-	baseline_acc = sum(Y_test == 1)*100.0/len(Y_test);
-	print (Y_test[:10],Y_predict[:10]);
-	print ("training accuracy is %.10f ,test accuracy is %.10f ,baseline_acc is %.10f"%(train_acc,test_acc,baseline_acc));
-	plt.hist(np.array(clf.predict(X_test)));
-	plt.show();
-	# plt.savefig('histogram.png');
-	error_matrix = [[0 for i in range(3)] for j in range(3)];
-	for i in range(3):
-		for j in range(3):
-			error_matrix[i][j] = sum(np.array(Y_test==(i-1)) * np.array(Y_predict==(j-1)));
-	print (error_matrix);
-	mylogger.save(clf,'MLP model training accuracy is %.10f ,test accuracy is %.10f ,baseline_acc is %.10f'%(train_acc,test_acc,baseline_acc) + "\n error matrix contains " + str(error_matrix) );
+def get_som(path,som_m,som_n,surf,mylogger):
+    som = SOM.train(path,som_m,som_n,surf);
+    mylogger.save(som,'trained som');
+    return som;
+
+def get_clf(X,Y,hidden_layer_shape,mylogger):
+    print ("start training MLP");
+    start_time = time.time();
+    clf = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=tuple(hidden_layer_shape), random_state=1)
+    clf.fit(X,Y);
+    elapsed_time = time.time() - start_time;
+    minutes = elapsed_time/60;
+    seconds = elapsed_time%60;
+    print ("finished learning in %d min and %d seconds"%(minutes,seconds));
+    mylogger.save(clf,'trained clf');
+    return clf;    
+   
+
+def split(X,Y,testSize = 0.3):
+    X_train, X_test, Y_train, Y_test =  \
+									train_test_split(X, Y, test_size=0.3, random_state=42,stratify = Y);
+    X_train = np.array(X_train,dtype = np.float32);
+    X_test = np.array(X_test,dtype = np.float32);
+    Y_train = np.array(Y_train,dtype = np.float32);
+    Y_test = np.array(Y_test,dtype = np.float32);
+    return X_train,Y_train,X_test,Y_test;
+
+
+def conduct_experiment(path,som_shape,hidden_layer_shape,surf_threshold,module_name):
+    mylogger = logger.logger(utils.join_parent('logger', 2),'working on %s with MLP and SOM is %s and %s hidden layer'%(module_name,str(som_shape),str(hidden_layer_shape)));
+    X,Y = read_data(path);
+    surf = cv2.xfeatures2d.SURF_create(surf_threshold);
+    som = get_som(path,surf,som_shape[0],som_shape[1],mylogger);
+    X = transform_data(X,Y,som,som_shape[0],som_shape[1],mylogger);
+    X_train,Y_train,X_test,Y_test = split(X,Y);
+    clf = get_clf(X_train,Y_train,hidden_layer_shape,mylogger);
+    train_acc = accuracy_score(Y_train, clf.predict(X_train))*100;
+    Y_predict = clf.predict(X_test);
+    test_acc = accuracy_score(Y_test, Y_predict)*100;
+    baseline_acc = sum(Y_test == 1)*100.0/len(Y_test);
+    print (Y_test[:10],Y_predict[:10]);
+    print ("training accuracy is %.10f ,test accuracy is %.10f ,baseline_acc is %.10f"%(train_acc,test_acc,baseline_acc));
+    plt.hist(np.array(clf.predict(X_test)));
+    plt.savefig('histogram.png');
+    plt.show();
+    error_matrix = [[0 for i in range(3)] for j in range(3)];
+    for i in range(3):
+        for j in range(3):
+            error_matrix[i][j] = sum(np.array(Y_test==(i-1)) * np.array(Y_predict==(j-1)));
+    print (error_matrix);
+    mylogger.save(clf,'MLP model training accuracy is %.10f ,test accuracy is %.10f ,baseline_acc is %.10f'%(train_acc,test_acc,baseline_acc) + "\n error matrix contains " + str(error_matrix) );    
+
     
+if __name__ == "__main__":
+    path = '/home/noureldin/Desktop/GP/dataset/BFC VS MAG';
+    conduct_experiment(path,[20,20],[5,5],4000,"ballout");
