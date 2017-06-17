@@ -20,27 +20,37 @@ sys.path.insert(0, '../')
 import logger,SOM;
 import utils;
 
+def assign_vals(labels):
+    label_val = {};
+    cur = 0;
+    for label in labels:
+        label_val[label] = cur;
+        cur += 1;
+    return label_val;
+
 def read_data(path):
     """returns path X,Y of data where X[i] is an image and Y[i] is its label"""
     data = {};
     val = {"no":-1,"undetermined":0,"yes":1};
     print ("started reading data");
     start_time = time.time();
+    labels = [];
     for (dirpath, dirnames, filenames) in walk(path):
-    	label = utils.get_dirname(dirpath)
-    	if label not in ["no","yes","undetermined"]: 
-    		continue;
-    	data[label] = filenames;
-
+        labels.extend(dirnames);
+        break;
+    label_val = assign_vals(labels);
+    for (dirpath, dirnames, filenames) in walk(path):
+        	label = utils.get_dirname(dirpath)
+        	if label not in label_val: 
+        		continue;
+        	data[label] = filenames;
     X = [];
     Y = [];
-    cnt = [0 for i in range(3)];
     for label in data:
         for img_name in data[label]:
             path_to_img = path+"/" +label+"/"+img_name;
             X.append(cv2.imread(path_to_img,0));
-            Y.append(val[label]);
-            cnt[val[label]+1] += 1;
+            Y.append(label_val[label]);
     elapsed_time = time.time() - start_time;
     minutes = elapsed_time/60;
     seconds = elapsed_time%60;
