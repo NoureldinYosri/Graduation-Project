@@ -32,8 +32,7 @@ class logger:
     
     def save(self,obj,message = ""):
         self.cnt += 1;
-        message = message if len(message) != 0 else str(self.cnt)
-        joblib.dump(obj, join(self.path, message + ".pkl"));
+        joblib.dump(obj, join(self.path, str(self.cnt) + ".pkl"));
         file_path = join(self.path, "note on trial #%d.txt"%self.cnt)
         f = open(file_path, "w");
         f.write(message);

@@ -86,9 +86,9 @@ def test(imgs,labels,path_to_trained_som,path_to_trained_network,som_m,som_n):
 
 if __name__ == "__main__":
 	# ToDo: change the logger child directory to reflect the right cached SOM
-	dir_list = ['..', 'logger', 'on Sun Jun 18 04-04-03 2017 working on goal with MLP and SOM is [20, 20] and [5, 5] hidden layer']
+	dir_list = ['..', 'logger', 'on Sun Jun 18 16-41-38 2017 working on BFC VS MAG with MLP and SOM is [20, 20] and [5, 5] hidden layer']
 	som_path = utils.join_list(dir_list + [Log.SOM.value+".pkl"])
 	NN_path = utils.join_list(dir_list + [Log.CLF.value+".pkl"])
-	data_path = utils.join_parent("goal") #ToDo: use the testing data path instead
+	data_path = utils.join_parent("BFC VS MAG") #ToDo: use the testing data path instead
 	imgs, labels = read_data(data_path)
 	print (test(imgs,labels,som_path,NN_path,20,20))
