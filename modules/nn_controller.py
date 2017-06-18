@@ -17,8 +17,8 @@ import sys,random
 import matplotlib.pylab as plt
 
 sys.path.insert(0, '../')
-import logger,SOM
-import utils
+import SOM,utils
+from logger import *
 
 def assign_vals(labels):
     label_val = {}
@@ -59,7 +59,7 @@ def read_data(path):
     Y = np.array(Y)
     return X,Y
 
-def transform_data(imgs,labels,som,m,n,mylogger):
+def transform_data(imgs,labels,som,m,n):
     data = zip(imgs, labels)
     res_imgs = []
     res_labels = []
@@ -83,13 +83,11 @@ def transform_data(imgs,labels,som,m,n,mylogger):
     minutes = elapsed_time/60
     seconds = elapsed_time%60
     print ("finished transforming %d features in %d min and %d seconds"%(cnt,minutes,seconds))
-    mylogger.save(res_imgs,'transformed images')
-    mylogger.save(res_labels,'labels')
     return res_imgs, res_labels
 
 def get_som(path,som_m,som_n,surf,mylogger):
     som = SOM.train(path,som_m,som_n,surf)
-    mylogger.save(som,'trained som')
+    mylogger.save(som, Log.SOM.value)
     return som
 
 def get_clf(X,Y,hidden_layer_shape,mylogger):
@@ -101,7 +99,7 @@ def get_clf(X,Y,hidden_layer_shape,mylogger):
     minutes = elapsed_time/60
     seconds = elapsed_time%60
     print ("finished learning in %d min and %d seconds"%(minutes,seconds))
-    mylogger.save(clf,'trained clf')
+    mylogger.save(clf, Log.CLF.value)
     return clf    
    
 
@@ -116,11 +114,13 @@ def split(X,Y,testSize = 0.3):
 
 
 def conduct_experiment(path,som_shape,hidden_layer_shape,surf_threshold,module_name):
-    mylogger = logger.logger(utils.join_parent('logger', 2),'working on %s with MLP and SOM is %s and %s hidden layer'%(module_name,str(som_shape),str(hidden_layer_shape)))
+    mylogger = logger(utils.join_parent('logger', 2),'working on %s with MLP and SOM is %s and %s hidden layer'%(module_name,str(som_shape),str(hidden_layer_shape)))
     X,Y = read_data(path)
     surf = cv2.xfeatures2d.SURF_create(surf_threshold)
     som = get_som(path,surf,som_shape[0],som_shape[1],mylogger)
-    X,Y = transform_data(X,Y,som,som_shape[0],som_shape[1],mylogger)
+    X,Y = transform_data(X,Y,som,som_shape[0],som_shape[1])
+    mylogger.save(X, Log.IMGS.value)
+    mylogger.save(Y, Log.LABELS.value)
     X_train,Y_train,X_test,Y_test = split(X,Y)
     clf = get_clf(X_train,Y_train,hidden_layer_shape,mylogger)
     train_acc = accuracy_score(Y_train, clf.predict(X_train))*100
