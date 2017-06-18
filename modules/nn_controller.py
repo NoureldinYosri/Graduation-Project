@@ -83,12 +83,11 @@ def transform_data(imgs,labels,surf,som,m,n):
     print ("finished transforming %d features in %d min and %d seconds"%(cnt,minutes,seconds))
     return res_imgs, res_labels
 
-def get_som(path,som_m,som_n,surf,mylogger):
+def get_som(path,som_m,som_n,surf):
     som = SOM.train(path,som_m,som_n,surf)
-    mylogger.save(som, Log.SOM.name)
     return som
 
-def get_clf(X,Y,hidden_layer_shape,mylogger):
+def get_clf(X,Y,hidden_layer_shape):
     print ("start training MLP")
     start_time = time.time()
     clf = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=tuple(hidden_layer_shape), random_state=1)
@@ -97,7 +96,6 @@ def get_clf(X,Y,hidden_layer_shape,mylogger):
     minutes = elapsed_time/60
     seconds = elapsed_time%60
     print ("finished learning in %d min and %d seconds"%(minutes,seconds))
-    mylogger.save(clf, Log.CLF.name)
     return clf    
    
 
@@ -135,12 +133,14 @@ def conduct_experiment(path,som_shape,hidden_layer_shape,surf_threshold,module_n
     mylogger = logger(utils.join_parent('logger', 2),'working on %s with MLP and SOM is %s and %s hidden layer'%(module_name,str(som_shape),str(hidden_layer_shape)))
     X,Y = read_data(path)
     surf = cv2.xfeatures2d.SURF_create(surf_threshold)
-    som = get_som(path,surf,som_shape[0],som_shape[1],mylogger)
+    som = get_som(path,surf,som_shape[0],som_shape[1])
+    mylogger.save(som, Log.SOM.name)
     X,Y = transform_data(X,Y,surf,som,som_shape[0],som_shape[1])
     mylogger.save(X, Log.IMGS.name)
     mylogger.save(Y, Log.LABELS.name)
     X_train,Y_train,X_test,Y_test = split(X,Y)
-    clf = get_clf(X_train,Y_train,hidden_layer_shape,mylogger)
+    clf = get_clf(X_train,Y_train,hidden_layer_shape)
+    mylogger.save(clf, Log.CLF.name)
     train_acc = accuracy_score(Y_train, clf.predict(X_train))*100
     Y_predict = clf.predict(X_test)
     test_acc = accuracy_score(Y_test, Y_predict)*100
