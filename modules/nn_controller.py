@@ -54,7 +54,7 @@ def read_data(path):
     minutes = elapsed_time/60
     seconds = elapsed_time%60
     print ("finished reading data in %d min and %d seconds"%(minutes,seconds))
-    X = np.array(X)
+    #X = np.array(X)
     Y = np.array(Y)
     return X,Y
 

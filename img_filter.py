@@ -17,6 +17,8 @@ save_path = join_parent("filter_output");
 if len(sys.argv) > 3:
 	save_path = join_parent(sys.argv[3])
 make_dir(save_path)
+LEN = max(map(lambda s:len(s),F));
+F = list(map(lambda s:(LEN - len(s))*'0' + s,F));
 F.sort();
 for img_name in F:
 	img = cv2.imread(join(path, img_name), 0);
