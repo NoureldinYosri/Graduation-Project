@@ -18,6 +18,7 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.metrics import accuracy_score
 import matplotlib.pylab as plt
 import numpy as np
+import dimensionality_reduction;
 
 def get_all_data(name_path):
     print('getting all data');
@@ -100,11 +101,20 @@ def transorm_all():
         save(tX,'transformed Xs of ' + names[i],mylogger);
         save(tY,'transformed Ys of ' + names[i],mylogger);
 
-def create_humongous_network():
-    mylogger = logger.logger(join_parent('logger',2),'working on humongous network');
+        
+
+def run_experiment(X,Y,hidden_layer_shape,PCA_attributes_size,PCA_whiten,mylogger = None,note = ""):
+    if PCA_attributes_size is not None:
+        X = dimensionality_reduction.reduce_pca(X,PCA_attributes_size,PCA_whiten);
+    X_train,Y_train,X_test,Y_test = nn_controller.split(X,Y)
+    clf = nn_controller.get_clf(X_train,Y_train,hidden_layer_shape)
+    note += "hidden layer shape is " + str(hidden_layer_shape) + "\n";
+    note += "PCA params are " + str(PCA_attributes_size) + " ," + str(PCA_whiten) ;
+    nn_controller.do_statistical_work(X_train,Y_train,X_test,Y_test,clf,mylogger,note);
+
+def create_humongous_data(path):
     X = [];
     Y = [];
-    path = '/home/noureldin/Desktop/workspace/logger/on Mon Jul  3 17-06-38 2017 transforming all data/%d.pkl';
     names = ['ball out','goal','kick','pitch-invasion','offenses'];
     offset = 0;
     for i in range(5):
@@ -115,24 +125,24 @@ def create_humongous_network():
         mx = max(tY);
         Y.extend(map(lambda x:x + offset,tY));
         offset += mx + 1;
-    save(X,'Xs of humongous network',mylogger);
-    save(Y,'Ys of humongous network',mylogger);
-    X_train,Y_train,X_test,Y_test = nn_controller.split(X,Y)
-#    hidden_layer_shape = (30,30,30,30);
-    hidden_layer_shape = (40,40);
-    clf = nn_controller.get_clf(X_train,Y_train,hidden_layer_shape)
-    nn_controller.do_statistical_work(X_train,Y_train,X_test,Y_test,clf,mylogger);
-        
-    
+    return X,Y;
+
 if __name__ == "__main__":
-#    name = "offenses";
-#    xpath = '/home/noureldin/Desktop/workspace/logger/on Mon Jul  3 17-06-38 2017 transforming all data/9.pkl';
-#    ypath = '/home/noureldin/Desktop/workspace/logger/on Mon Jul  3 17-06-38 2017 transforming all data/10.pkl';
-#    X = load(xpath,"Xs of " + name);
-#    Y = load(ypath,"Ys of " + name);
-#    X_train,Y_train,X_test,Y_test = nn_controller.split(X,Y)
-#    hidden_layer_shape = (30,30);
-#    hidden_layer_shape = (30,30,30,30);
-#    clf = nn_controller.get_clf(X_train,Y_train,hidden_layer_shape)
-#    nn_controller.do_statistical_work(X_train,Y_train,X_test,Y_test,clf,None);
-    create_humongous_network();
+    name = "offenses";
+    names = ['ball out','goal','kick','pitch-invasion','offenses'];
+    path = '/home/noureldin/Desktop/workspace/logger/on Mon Jul  3 17-06-38 2017 transforming all data/%d.pkl';
+    mylogger = logger.logger(join_parent('logger',2),'getting all clfs');
+    for i in range(5):
+        xpath = path%(2*i+1);
+        ypath = path%(2*i+2);
+        X = load(xpath,'Xs of ' + names[i]);
+        Y = load(ypath,'Ys of ' + names[i]);
+        run_experiment(X,Y,(30,30,30),None,None,mylogger,'clf of ' + names[i] + "\n");
+    path = '/home/noureldin/Desktop/workspace/logger/on Mon Jul  3 17-06-38 2017 transforming all data/%d.pkl';
+    X,Y = create_humongous_data(path);
+#    X = dimensionality_reduction.reduce_pca(X,1500,False);
+#    run_experiment(X,Y,(30,30),None,None,mylogger=mylogger);
+    run_experiment(X,Y,(30,30,30),None,None,mylogger,"clf of all\n");
+    
+    
+    #create_humongous_network();

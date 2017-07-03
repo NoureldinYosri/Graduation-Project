@@ -148,7 +148,7 @@ def get_most_frequent(Y):
     return 0;
 
 
-def do_statistical_work(X_train,Y_train,X_test,Y_test,clf,mylogger):
+def do_statistical_work(X_train,Y_train,X_test,Y_test,clf,mylogger = None,note = ""):
     train_acc = accuracy_score(Y_train, clf.predict(X_train))*100
     Y_predict = clf.predict(X_test)
     test_acc = accuracy_score(Y_test, Y_predict)*100
@@ -159,7 +159,7 @@ def do_statistical_work(X_train,Y_train,X_test,Y_test,clf,mylogger):
     plt.show()
     error_matrix = create_error_matrix(Y_test,Y_predict);
     print (error_matrix)
-    if mylogger is not None: mylogger.save(clf,'MLP model training accuracy is %.10f, test accuracy is %.10f, baseline_acc is %.10f'%(train_acc,test_acc,baseline_acc) + "\n error matrix contains " + str(error_matrix) )    
+    if mylogger is not None: mylogger.save(clf,'MLP model training accuracy is %.10f, test accuracy is %.10f, baseline_acc is %.10f'%(train_acc,test_acc,baseline_acc) + "\n error matrix contains " + str(error_matrix) + "\n" + note)    
 
 
 def conduct_experiment(path,som_shape,hidden_layer_shape,surf_threshold,module_name,som_path = None):
