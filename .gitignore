@@ -16,3 +16,4 @@ GUI/__pycache__/mode_chooser_window.cpython-35.pyc
 GUI/__pycache__/player_detector.cpython-35.pyc
 GUI/__pycache__/player_tracker.cpython-35.pyc
 GUI/__pycache__/window.cpython-35.pyc
+*.pyc

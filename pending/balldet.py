@@ -133,15 +133,12 @@ def findBall(img , colorImg):
 	
 	return colorImg
 
-
-
-
-
-while cv2.waitKey(20) == -1:
-    error, img = camera_source.read()
-    # img=eleminateCrowd(img)
-    colorImg=img
-    img = morphoImg(img)
-    img = findBall(img,colorImg)
-    cv2.imshow('ball', img)
+if __name__ == '__main__':
+	while cv2.waitKey(20) == -1:
+		error, img = camera_source.read()
+		# img=eleminateCrowd(img)
+		colorImg=img
+		img = morphoImg(img)
+		img = findBall(img,colorImg)
+		cv2.imshow('ball', img)
 
