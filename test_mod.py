@@ -40,6 +40,7 @@ if __name__ == "__main__":
 		# print(des)
 		# cv2.imshow('vid', img)
 		# img = np.array(img)
+		cv2.imshow('video', img)
 		nn_mod(img, som, clf, surf)
 		if cv2.waitKey(1) & 0xFF == ord('q'):
 	            break

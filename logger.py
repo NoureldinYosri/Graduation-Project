@@ -15,6 +15,8 @@ class Log(Enum):
      IMGS = "2"
      LABELS = "3"
      CLF = "4"
+     FINAL_SOM = "som"
+     FINAL_CLF = "clf"
 
 class logger:
     def __init__(self,path,note = None):
