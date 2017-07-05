@@ -108,6 +108,12 @@
           <underline>false</underline>
          </font>
         </property>
+        <property name="autoFillBackground">
+         <bool>false</bool>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: rgb(255, 121, 32);</string>
+        </property>
         <property name="text">
          <string>Choose one of the below modes of operation:</string>
         </property>
@@ -132,6 +138,9 @@
           <stylestrategy>PreferDefault</stylestrategy>
           <kerning>true</kerning>
          </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(button_bg.png)</string>
         </property>
         <property name="text">
          <string>General Video Model</string>
@@ -170,6 +179,9 @@
           <family>Consolas</family>
           <pointsize>10</pointsize>
          </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background: url(:/button_bg.png)</string>
         </property>
         <property name="text">
          <string>Track Ball</string>

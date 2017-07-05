@@ -138,7 +138,7 @@ def start_detecting(path):
 		colorImg = img
 		img = morphoImg(img)
 		img = findBall(img, colorImg)
-		cv2.imshow('ball', img)
+		cv2.imshow('Ball Tracking', img)
 		
 		if cv2.waitKey(1) & 0xFF == ord('q'):
                     break

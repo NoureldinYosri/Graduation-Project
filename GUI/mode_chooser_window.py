@@ -34,10 +34,28 @@ class Window(QMainWindow, ModeChooserUI):
         self.commentary = CommentWindow()
         self.general_video_btn.clicked.connect(self.onGeneralVideoClicked)
         self.general_img_btn.clicked.connect(self.onGeneralImageClicked)
-        # self.separate_video_btn.clicked.connect(self.onSeperateVideoClicked)
-        # self.separate_img_btn.clicked.connect(self.onSeperateImageClicked)
+        self.separate_video_btn.clicked.connect(self.onSeperateVideoClicked)
+        self.separate_img_btn.clicked.connect(self.onSeperateImageClicked)
         self.track_players_btn.clicked.connect(self.onTrackPlayersClicked)
         self.track_ball_btn.clicked.connect(self.onTrackBallClicked)
+
+    def onSeperateVideoClicked(self, event):
+        path = dialog.openVideoChooserDialog()
+        if path:
+            camera = cv2.VideoCapture(path)
+            while True:
+                ret, img = camera.read()
+                img = player_tracker.update_and_draw_box(img) 
+                cv2.imshow("Player Tracking", img)       
+                if cv2.waitKey(1) & 0xFF == ord('q'):
+                    break
+
+    def onSeperateImageClicked(self, event):
+        path = dialog.openImageChooserDialog()
+        if path:
+            img = cv2.imread(path)
+            event_type = self.classifier.classify(img)
+            self.showEvent(event_type, img)
 
     def onTrackPlayersClicked(self, event):
         player_tracker = PlayerTracker()
