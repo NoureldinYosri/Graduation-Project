@@ -13,13 +13,15 @@ def train(path,surf,m = 5,n = 5,nitr = 100):
         on the SURF features detected in it
     """
     image_paths = auxiliary.get_all_file_paths(path);
-    image_paths = filter(lambda path: path.endswith('.jpg'),image_paths);
+    print ("number of images = ",len(image_paths));    
+#    image_paths = filter(lambda path: path.endswith('.jpg'),image_paths);
 #    image_paths = random.sample(image_paths,100);
 
     retSOM = somoclu.Somoclu(m,n,initialization = "pca");
     num_training_features = 0;
-    
     print ("started extracting features");
+    lst = cnt = 0; 
+    cnt_all = len(image_paths); 
     start_time = time.time();
     data = [];
     for image_path in image_paths:
@@ -31,6 +33,10 @@ def train(path,surf,m = 5,n = 5,nitr = 100):
         for feature_description in des:
             data.append(feature_description);
             num_training_features += 1;
+        cnt += 1;
+        p = int(cnt*100.0/cnt_all);
+        if p != lst: print ("%d%% done"%p);
+        lst = p;
     elapsed_time = time.time() - start_time;
     minutes = elapsed_time/60;
     seconds = elapsed_time%60;
@@ -54,11 +60,14 @@ def train(path,surf,m = 5,n = 5,nitr = 100):
     return retSOM;
 
 if __name__ == "__main__":
-    mypath = join_parent("BFC VS MAG")
-    mylogger = logger.logger(join_parent('logger'),'trying somoclu with PCA intializer');
-    mylogger.save("object w 5las", "lolgdan")
-    #mySOM = train(mypath);
-    #mylogger.save(mySOM);
+#    mypath = join_parent("BFC VS MAG")
+    mypath = "/home/noureldin/Desktop/GP/used data";
+    mylogger = logger.logger(join_parent('logger'),'SOM on all data with SURF threshold of 4000');
+    #mylogger.save("object w 5las", "lolgdan")
+    surf_threshold = 4000;
+    surf = cv2.xfeatures2d.SURF_create(surf_threshold)
+    mySOM = train(mypath,surf,50,50);
+    mylogger.save(mySOM,"trained som on all data");
     #to get neuron which a feature map to use
     #let feature descriptor be names fd
     #x = np.array(fd);
