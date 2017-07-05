@@ -23,7 +23,7 @@ class ImageClassifier:
     def classify(self, img):
         surf = cv2.xfeatures2d.SURF_create(4000)
         img = self.transform_data(img, self.som, surf, 50, 50)
-        prediction = self.clf.predict(img)
+        prediction = self.clf.predict(np.array([img]))
         return int(prediction[0])
 
     def transform_data(self, img, som, surf, m, n):

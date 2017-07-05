@@ -7,3 +7,12 @@ modules/histogram.png
 .vscode/settings.json
 modules/__pycache__/network_handler.cpython-35.pyc
 modules/__pycache__/nn_controller.cpython-35.pyc
+GUI/__pycache__/commentator_layout.cpython-35.pyc
+GUI/__pycache__/commentator_window.cpython-35.pyc
+GUI/__pycache__/dialog.cpython-35.pyc
+GUI/__pycache__/image_nn.cpython-35.pyc
+GUI/__pycache__/mode_chooser_layout.cpython-35.pyc
+GUI/__pycache__/mode_chooser_window.cpython-35.pyc
+GUI/__pycache__/player_detector.cpython-35.pyc
+GUI/__pycache__/player_tracker.cpython-35.pyc
+GUI/__pycache__/window.cpython-35.pyc
