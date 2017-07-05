@@ -74,6 +74,7 @@ if __name__ == "__main__":
     X = joblib.load('/home/islam/Desktop/logger/on Wed Jul  5 22-14-58 2017 new data/1.pkl');
     Y = joblib.load('/home/islam/Desktop/logger/on Wed Jul  5 22-14-58 2017 new data/2.pkl');
     
-    X_train,Y_train,X_test,Y_test = nn_controller.split(X,Y);
+    X_train,Y_train,X_test,Y_test = nn_controller.split(X,Y,Log);
     clf = nn_controller.get_clf(X_train,Y_train,hidden_layer_shape);
     nn_controller.do_statistical_work(X_train,Y_train,X_test,Y_test,clf);
+    Log.save(clf,'clf');
