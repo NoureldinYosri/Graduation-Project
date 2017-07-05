@@ -1,7 +1,5 @@
 import cv2, numpy as np, math
 
-camera_source = cv2.VideoCapture("bb.mp4")
-
 def eleminateCrowd(img):
 	blue=img[:,:,0]
 	green=img[:,:,1]
@@ -133,15 +131,18 @@ def findBall(img , colorImg):
 	
 	return colorImg
 
+def start_detecting(path):
+	camera_source = cv2.VideoCapture(path)
+	while True:
+		error, img = camera_source.read()
+		colorImg = img
+		img = morphoImg(img)
+		img = findBall(img, colorImg)
+		cv2.imshow('ball', img)
+		
+		if cv2.waitKey(1) & 0xFF == ord('q'):
+                    break
 
-
-
-
-while cv2.waitKey(20) == -1:
-    error, img = camera_source.read()
-    # img=eleminateCrowd(img)
-    colorImg=img
-    img = morphoImg(img)
-    img = findBall(img,colorImg)
-    cv2.imshow('ball', img)
+if __name__ == '__main__':
+	start_detecting("bb.mp4")
 

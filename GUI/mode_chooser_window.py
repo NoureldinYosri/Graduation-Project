@@ -5,6 +5,7 @@ import cv2, dialog
 from commentator_window import Window as CommentWindow
 from window import Manager as WindowManager
 from player_tracker import tracker as PlayerTracker
+import ball_detector
 
 comment_map = {
     0: "Ball maybe out!", 
@@ -36,7 +37,7 @@ class Window(QMainWindow, ModeChooserUI):
         # self.separate_video_btn.clicked.connect(self.onSeperateVideoClicked)
         # self.separate_img_btn.clicked.connect(self.onSeperateImageClicked)
         self.track_players_btn.clicked.connect(self.onTrackPlayersClicked)
-        # self.track_ball_btn.clicked.connect(self.onTrackBallClicked)
+        self.track_ball_btn.clicked.connect(self.onTrackBallClicked)
 
     def onTrackPlayersClicked(self, event):
         player_tracker = PlayerTracker()
@@ -49,6 +50,11 @@ class Window(QMainWindow, ModeChooserUI):
                 cv2.imshow("Player Tracking", img)       
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
+
+    def onTrackBallClicked(self, event):
+        path = dialog.openVideoChooserDialog()
+        if path:
+            ball_detector.start_detecting(path)
 
     def showEvent(self, event_type, img):
         cv2.imshow("LiveStream", img)
