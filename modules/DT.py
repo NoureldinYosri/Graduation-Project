@@ -6,11 +6,11 @@ This is a temporary script file.
 """
 
 import joblib
-import nn_controller
+from modules import nn_controller
 import numpy as np;
 import time,sys;
 sys.path.insert(0, '../')
-import logger
+import logger, utils
 
 def read_data(path):
     X = [];
@@ -28,8 +28,10 @@ def read_data(path):
 def read_clfs(path):
     clfs = [None for i in range(6)];
     for i in range(1,6 + 1):
-        clfs[i-1] = joblib.load(path + str(i) + ".pkl");
-    return clfs;
+        clfs[i-1] = joblib.load(utils.join(path, str(i)+".pkl"));
+    
+    fclf = joblib.load(utils.join(path, "fclf.pkl"))
+    return clfs, fclf;
     
     
 def create_new_date(X,Y,clfs):
@@ -52,12 +54,12 @@ def create_new_date(X,Y,clfs):
 class classifier:
     def __init__(self,clfs,fclf):
         self.clfs = [clf for clf in clfs];
-        self.fclf = fclf;         
+        self.fclf = fclf;
     def predict(self,x):
         x = np.array([x]);
         x = [clf.predict(x)[0] for clf in self.clfs];
         x = np.array([x]);
-        return self.fclfs.predict(x);
+        return int(self.fclf.predict(x)[0]);
         
 if __name__ == "__main__":
 #    path = '/home/islam/Desktop/drive-download-20170705T193213Z-001/on Mon Jul  3 21-41-53 2017 getting all clfs/';

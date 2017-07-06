@@ -21,13 +21,13 @@ class ImageClassifier:
         return som, clf
 
     def classify(self, img):
-        surf = cv2.xfeatures2d.SURF_create(4000)
-        img = self.transform_data(img, self.som, surf, 50, 50)
+        img = self.transform_data(img, self.som, surf)
         prediction = self.clf.predict(np.array([img]))
         return int(prediction[0])
 
-    def transform_data(self, img, som, surf, m, n):
+    def transform_data(self, img, som, m=50, n=50):
         cnt = 0
+        surf = cv2.xfeatures2d.SURF_create(4000)
         kp, des = surf.detectAndCompute(img,None)
         # print (des)
         compressed = [0 for i in range(m*n)]

@@ -6,12 +6,11 @@ class Manager:
         self.q = [];
 
     def getMostFrequent(self):
-        data = Counter(self.q + (self.size//5 * [2]));
+        data = Counter(self.q + ((self.size + 5)//6 * [2]));
         print (self.q);
         return data.most_common(1)[0][0]
 
     def add(self, event):
-        if event in [2,5,9,12]: event = 2;
         self.q.append(event)
         n = len(self.q)
         print(n)

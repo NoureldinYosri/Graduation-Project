@@ -37,6 +37,9 @@
           <kerning>true</kerning>
          </font>
         </property>
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
         <property name="text">
          <string>General Image Model</string>
         </property>
@@ -62,6 +65,9 @@
           <kerning>true</kerning>
          </font>
         </property>
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
         <property name="text">
          <string>Seperate Video Model</string>
         </property>
@@ -86,6 +92,9 @@
           <stylestrategy>PreferDefault</stylestrategy>
           <kerning>true</kerning>
          </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"/>
         </property>
         <property name="text">
          <string>Seperate Image Model</string>
@@ -140,7 +149,7 @@
          </font>
         </property>
         <property name="styleSheet">
-         <string notr="true">background-image: url(button_bg.png)</string>
+         <string notr="true"/>
         </property>
         <property name="text">
          <string>General Video Model</string>
@@ -160,6 +169,9 @@
           <family>Consolas</family>
           <pointsize>10</pointsize>
          </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"/>
         </property>
         <property name="text">
          <string>Track Players</string>
@@ -181,7 +193,7 @@
          </font>
         </property>
         <property name="styleSheet">
-         <string notr="true">background: url(:/button_bg.png)</string>
+         <string notr="true"/>
         </property>
         <property name="text">
          <string>Track Ball</string>
