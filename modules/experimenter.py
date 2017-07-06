@@ -132,17 +132,18 @@ if __name__ == "__main__":
     names = ['ball out','goal','kick','pitch-invasion','offenses'];
     path = '/home/noureldin/Desktop/workspace/logger/on Mon Jul  3 17-06-38 2017 transforming all data/%d.pkl';
     mylogger = logger.logger(join_parent('logger',2),'getting all clfs');
-    for i in range(5):
-        xpath = path%(2*i+1);
-        ypath = path%(2*i+2);
-        X = load(xpath,'Xs of ' + names[i]);
-        Y = load(ypath,'Ys of ' + names[i]);
-        run_experiment(X,Y,(30,30,30),None,None,mylogger,'clf of ' + names[i] + "\n");
+#    for i in range(5):
+#        xpath = path%(2*i+1);
+#        ypath = path%(2*i+2);
+#        X = load(xpath,'Xs of ' + names[i]);
+#        Y = load(ypath,'Ys of ' + names[i]);
+#        run_experiment(X,Y,(30,30,30),None,None,mylogger,'clf of ' + names[i] + "\n");
     path = '/home/noureldin/Desktop/workspace/logger/on Mon Jul  3 17-06-38 2017 transforming all data/%d.pkl';
     X,Y = create_humongous_data(path);
-#    X = dimensionality_reduction.reduce_pca(X,1500,False);
+##    X = dimensionality_reduction.reduce_pca(X,1500,False);
 #    run_experiment(X,Y,(30,30),None,None,mylogger=mylogger);
-    run_experiment(X,Y,(30,30,30),None,None,mylogger,"clf of all\n");
+    for i in range(1,5+1):
+        run_experiment(X,Y,(30,30,30),100 + i*20,False,mylogger,"clf of all\n");
     
     
     #create_humongous_network();

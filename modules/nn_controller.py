@@ -126,13 +126,19 @@ def split(X,Y,testSize = 0.3):
     Y_test = np.array(Y_test,dtype = np.float32)
     return X_train,Y_train,X_test,Y_test
 
-def create_error_matrix(Y_true,prediction):
+def create_error_matrix(Y_true,prediction,note=""):
     vals = list(set(Y_true));
     n = len(vals);
     error_matrix = [[0 for i in range(n)] for j in range(n)]
     for i in range(n):
         for j in range(n):
             error_matrix[i][j] = sum(np.array(Y_true==vals[i]) * np.array(prediction==vals[j]));  
+
+    fig, axes = plt.subplots(nrows=n);
+    for i in range(n):
+        axes[i].imshow([error_matrix[i]],cmap='hot',vmin = 0,vmax = sum(error_matrix[i]));
+    plt.savefig(note + ' error_matrix.png')
+    #plt.show();
     return error_matrix;
 
 def get_most_frequent(Y):
@@ -155,9 +161,9 @@ def do_statistical_work(X_train,Y_train,X_test,Y_test,clf,mylogger = None,note =
     baseline_acc = sum(Y_test == get_most_frequent(Y_train))*100.0/len(Y_test)
     print ("training accuracy is %.10f, test accuracy is %.10f, baseline_acc is %.10f"%(train_acc,test_acc,baseline_acc))
     plt.hist(np.array(clf.predict(X_test)))
-    plt.savefig('histogram.png')
-    plt.show()
-    error_matrix = create_error_matrix(Y_test,Y_predict);
+    plt.savefig(note + ' histogram.png')
+    #plt.show()
+    error_matrix = create_error_matrix(Y_test,Y_predict,note);
     print (error_matrix)
     if mylogger is not None: mylogger.save(clf,'MLP model training accuracy is %.10f, test accuracy is %.10f, baseline_acc is %.10f'%(train_acc,test_acc,baseline_acc) + "\n error matrix contains " + str(error_matrix) + "\n" + note)    
 
