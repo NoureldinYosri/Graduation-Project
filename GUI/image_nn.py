@@ -21,7 +21,7 @@ class ImageClassifier:
         return som, clf
 
     def classify(self, img):
-        img = self.transform_data(img, self.som, surf)
+        img = self.transform_data(img, self.som)
         prediction = self.clf.predict(np.array([img]))
         return int(prediction[0])
 
@@ -31,10 +31,11 @@ class ImageClassifier:
         kp, des = surf.detectAndCompute(img,None)
         # print (des)
         compressed = [0 for i in range(m*n)]
-        for feature_description in des:
-            cnt += 1
-            activation_map = som.get_surface_state(np.array(feature_description).reshape(1,64))
-            for match in som.get_bmus(activation_map):
-                compressed[match[0]*n + match[1]] += 1
+        if des != None:
+            for feature_description in des:
+                cnt += 1
+                activation_map = som.get_surface_state(np.array(feature_description).reshape(1,64))
+                for match in som.get_bmus(activation_map):
+                    compressed[match[0]*n + match[1]] += 1
         res_img = np.array(compressed,dtype = np.float32)
         return res_img

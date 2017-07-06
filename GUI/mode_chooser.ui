@@ -13,10 +13,30 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(231, 208, 208);
+</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(240, 240, 240)
+</string>
+   </property>
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
+    <item row="1" column="0">
      <layout class="QGridLayout" name="gridLayout_2">
+      <property name="leftMargin">
+       <number>10</number>
+      </property>
+      <property name="topMargin">
+       <number>10</number>
+      </property>
+      <property name="rightMargin">
+       <number>10</number>
+      </property>
+      <property name="bottomMargin">
+       <number>10</number>
+      </property>
       <item row="3" column="0">
        <widget class="QPushButton" name="general_img_btn">
         <property name="minimumSize">
@@ -27,18 +47,17 @@
         </property>
         <property name="font">
          <font>
-          <family>Consolas</family>
-          <pointsize>10</pointsize>
+          <family>Arial</family>
+          <pointsize>12</pointsize>
           <weight>50</weight>
+          <italic>false</italic>
           <bold>false</bold>
-          <underline>false</underline>
-          <strikeout>false</strikeout>
-          <stylestrategy>PreferDefault</stylestrategy>
-          <kerning>true</kerning>
          </font>
         </property>
         <property name="styleSheet">
-         <string notr="true"/>
+         <string notr="true">color: #fff;
+background-color: rgb(140, 171, 255);
+font: 12pt &quot;Arial&quot;;</string>
         </property>
         <property name="text">
          <string>General Image Model</string>
@@ -55,18 +74,17 @@
         </property>
         <property name="font">
          <font>
-          <family>Consolas</family>
-          <pointsize>10</pointsize>
+          <family>Arial</family>
+          <pointsize>12</pointsize>
           <weight>50</weight>
+          <italic>false</italic>
           <bold>false</bold>
-          <underline>false</underline>
-          <strikeout>false</strikeout>
-          <stylestrategy>PreferDefault</stylestrategy>
-          <kerning>true</kerning>
          </font>
         </property>
         <property name="styleSheet">
-         <string notr="true"/>
+         <string notr="true">color: #fff;
+background-color: rgb(140, 171, 255);
+font: 12pt &quot;Arial&quot;;</string>
         </property>
         <property name="text">
          <string>Seperate Video Model</string>
@@ -83,48 +101,20 @@
         </property>
         <property name="font">
          <font>
-          <family>Consolas</family>
-          <pointsize>10</pointsize>
+          <family>Arial</family>
+          <pointsize>12</pointsize>
           <weight>50</weight>
+          <italic>false</italic>
           <bold>false</bold>
-          <underline>false</underline>
-          <strikeout>false</strikeout>
-          <stylestrategy>PreferDefault</stylestrategy>
-          <kerning>true</kerning>
          </font>
         </property>
         <property name="styleSheet">
-         <string notr="true"/>
+         <string notr="true">color: #fff;
+background-color: rgb(140, 171, 255);
+font: 12pt &quot;Arial&quot;;</string>
         </property>
         <property name="text">
          <string>Seperate Image Model</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0" colspan="2" alignment="Qt::AlignHCenter">
-       <widget class="QLabel" name="label">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="font">
-         <font>
-          <family>Arial</family>
-          <pointsize>13</pointsize>
-          <italic>false</italic>
-          <underline>false</underline>
-         </font>
-        </property>
-        <property name="autoFillBackground">
-         <bool>false</bool>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">color: rgb(255, 121, 32);</string>
-        </property>
-        <property name="text">
-         <string>Choose one of the below modes of operation:</string>
         </property>
        </widget>
       </item>
@@ -138,18 +128,17 @@
         </property>
         <property name="font">
          <font>
-          <family>Consolas</family>
-          <pointsize>10</pointsize>
+          <family>Arial</family>
+          <pointsize>12</pointsize>
           <weight>50</weight>
+          <italic>false</italic>
           <bold>false</bold>
-          <underline>false</underline>
-          <strikeout>false</strikeout>
-          <stylestrategy>PreferDefault</stylestrategy>
-          <kerning>true</kerning>
          </font>
         </property>
         <property name="styleSheet">
-         <string notr="true"/>
+         <string notr="true">color: #fff;
+background-color: rgb(140, 171, 255);
+font: 12pt &quot;Arial&quot;;</string>
         </property>
         <property name="text">
          <string>General Video Model</string>
@@ -166,12 +155,17 @@
         </property>
         <property name="font">
          <font>
-          <family>Consolas</family>
-          <pointsize>10</pointsize>
+          <family>Arial</family>
+          <pointsize>12</pointsize>
+          <weight>50</weight>
+          <italic>false</italic>
+          <bold>false</bold>
          </font>
         </property>
         <property name="styleSheet">
-         <string notr="true"/>
+         <string notr="true">color: #fff;
+background-color: rgb(140, 171, 255);
+font: 12pt &quot;Arial&quot;;</string>
         </property>
         <property name="text">
          <string>Track Players</string>
@@ -188,12 +182,17 @@
         </property>
         <property name="font">
          <font>
-          <family>Consolas</family>
-          <pointsize>10</pointsize>
+          <family>Arial</family>
+          <pointsize>12</pointsize>
+          <weight>50</weight>
+          <italic>false</italic>
+          <bold>false</bold>
          </font>
         </property>
         <property name="styleSheet">
-         <string notr="true"/>
+         <string notr="true">color: #fff;
+background-color: rgb(140, 171, 255);
+font: 12pt &quot;Arial&quot;;</string>
         </property>
         <property name="text">
          <string>Track Ball</string>
@@ -201,6 +200,36 @@
        </widget>
       </item>
      </layout>
+    </item>
+    <item row="0" column="0" alignment="Qt::AlignHCenter">
+     <widget class="QLabel" name="label">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="font">
+       <font>
+        <family>Arial</family>
+        <pointsize>13</pointsize>
+        <italic>false</italic>
+        <underline>false</underline>
+       </font>
+      </property>
+      <property name="autoFillBackground">
+       <bool>false</bool>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(170, 0, 0)</string>
+      </property>
+      <property name="text">
+       <string>Choose one of the below modes of operation:</string>
+      </property>
+      <property name="margin">
+       <number>10</number>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>

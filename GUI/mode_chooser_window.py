@@ -19,7 +19,7 @@ comment_map = {
     7: "Free Kick!",
     8: "Goal Kick!",
     10: "Pitch Invasion!",
-    11: "Non-Offensive Assault",
+    # 11: "Non-Offensive Assault",
     13: "Offensive Assault"
 }
 
@@ -47,6 +47,38 @@ class Window(QMainWindow, ModeChooserUI):
         self.separate_img_btn.clicked.connect(self.onSeperateImageClicked)
         self.track_players_btn.clicked.connect(self.onTrackPlayersClicked)
         self.track_ball_btn.clicked.connect(self.onTrackBallClicked)
+        # self.processMultipleVideos()
+
+    def processMultipleVideos(self):
+        filepaths = dialog.openMultipleVideoChooserDialog()
+        cnt = 0
+        for path in filepaths:
+            window = WindowManager()
+            if path:
+                out = None
+                camera = cv2.VideoCapture(path)
+                self.commentary.showComment(start_comment)
+                while True:
+                    ret, img = camera.read()
+                    if not ret:
+                        break
+                    clfs, fclf = load_clfs()
+                    dt = DT.classifier(clfs, fclf)
+                    x = self.classifier.transform_data(img, self.classifier.som)
+                    event_type = dt.predict(x)
+                    event_type = window.add(event_type)
+                    self.showEvent(event_type, img)
+                    if not out:
+                        height, width, channels = img.shape
+                        fourcc = cv2.VideoWriter_fourcc(*'XVID')
+                        out = cv2.VideoWriter(str(cnt)+'.avi',fourcc, 20.0, (width,height))
+                        cnt+=1
+                    out.write(img)
+                    if cv2.waitKey(1) & 0xFF == ord('q'):
+                        break
+                camera.release()
+                out.release()
+                cv2.destroyAllWindows()
 
     def onSeperateVideoClicked(self, event):
         path = dialog.openVideoChooserDialog()
@@ -57,6 +89,8 @@ class Window(QMainWindow, ModeChooserUI):
             self.commentary.showComment(start_comment)
             while True:
                 ret, img = camera.read()
+                if not ret:
+                    break
                 clfs, fclf = load_clfs()
                 dt = DT.classifier(clfs, fclf)
                 x = self.classifier.transform_data(img, self.classifier.som)
@@ -72,6 +106,7 @@ class Window(QMainWindow, ModeChooserUI):
                     break
             camera.release()
             out.release()
+            cv2.destroyAllWindows()
 
     def onSeperateImageClicked(self, event):
         path = dialog.openImageChooserDialog()
@@ -106,25 +141,30 @@ class Window(QMainWindow, ModeChooserUI):
     def draw_text(self, frame, text, x=40, y=40):
         cv2.putText(frame, text, (int(x), int(y)), cv2.FONT_HERSHEY_SIMPLEX, 1 , (255,255,255), 2)
         cv2.imshow("LiveStream", frame)
-            
 
     def onGeneralVideoClicked(self, event):
         path = dialog.openVideoChooserDialog()
         windowManager = WindowManager()
-        out = cv2.VideoWriter('output.mp4', VideoWriter_fourcc(*'MP4V'), 20.0, (640,480))
+        out = None
         if path:
             camera = cv2.VideoCapture(path)
             self.commentary.showComment(start_comment)
             while True:
                 ret, img = camera.read()
+                if not ret:
+                    break
                 event_type = self.classifier.classify(img)
                 event_type = windowManager.add(event_type)
                 self.showEvent(event_type, img)
-                out.write(img)
+                if not out:
+                    height, width, channels = img.shape
+                    fourcc = cv2.VideoWriter_fourcc(*'XVID')
+                    out = cv2.VideoWriter('output.avi',fourcc, 20.0, (width,height))
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
         camera.release()
         out.release()
+        cv2.destroyAllWindows()
 
     def onGeneralImageClicked(self, event):
         path = dialog.openImageChooserDialog()
