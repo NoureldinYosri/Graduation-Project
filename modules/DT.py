@@ -6,10 +6,10 @@ This is a temporary script file.
 """
 
 import joblib
-from modules import nn_controller
-import numpy as np;
 import time,sys;
 sys.path.insert(0, '../')
+from modules import nn_controller
+import numpy as np;
 import logger, utils
 
 def read_data(path):
@@ -31,7 +31,7 @@ def read_clfs(path):
         clfs[i-1] = joblib.load(utils.join(path, str(i)+".pkl"));
     
     fclf = joblib.load(utils.join(path, "fclf.pkl"))
-    return clfs, fclf;
+    return clfs,fclf;
     
     
 def create_new_date(X,Y,clfs):
@@ -62,21 +62,24 @@ class classifier:
         return int(self.fclf.predict(x)[0]);
         
 if __name__ == "__main__":
-#    path = '/home/islam/Desktop/drive-download-20170705T193213Z-001/on Mon Jul  3 21-41-53 2017 getting all clfs/';
+#    path = '/home/noureldin/Desktop/workspace/ready to use/on Mon Jul  3 21-41-53 2017 getting all clfs/';
 #    clfs = read_clfs(path);
-#    path = '/home/islam/Desktop/drive-download-20170705T193213Z-001/on Mon Jul  3 17-06-38 2017 transforming all data/';
+#    path = '/home/noureldin/Desktop/workspace/ready to use/on Mon Jul  3 17-06-38 2017 transforming all data/';
 #    X,Y = read_data(path);
 #    X,Y = create_new_date(X,Y,clfs);
 #    X = np.array(X);
 #    Y = np.array(Y);
-    hidden_layer_shape = (100,100,100);    
-    Log = logger.logger("/home/islam/Desktop/logger","new clfs " + str(hidden_layer_shape));
+#   Log = logger.logger('/home/noureldin/Desktop/workspace/logger/',"getting new form of data ");
 #    Log.save(X,'new Xs');
 #    Log.save(Y,'new Ys');
-    X = joblib.load('/home/islam/Desktop/logger/on Wed Jul  5 22-14-58 2017 new data/1.pkl');
-    Y = joblib.load('/home/islam/Desktop/logger/on Wed Jul  5 22-14-58 2017 new data/2.pkl');
+    hidden_layer_shape = (100,100,100);
+    Log = logger.logger('/home/noureldin/Desktop/workspace/logger/',"new clf " + str(hidden_layer_shape));
+    X = joblib.load('/home/noureldin/Desktop/workspace/logger/on Thu Jul  6 09-10-30 2017 getting new form of data /1.pkl');
+    Y = joblib.load('/home/noureldin/Desktop/workspace/logger/on Thu Jul  6 09-10-30 2017 getting new form of data /2.pkl');
     
     X_train,Y_train,X_test,Y_test = nn_controller.split(X,Y,Log);
     clf = nn_controller.get_clf(X_train,Y_train,hidden_layer_shape);
     nn_controller.do_statistical_work(X_train,Y_train,X_test,Y_test,clf);
     Log.save(clf,'clf');
+    #max_iter ,
+    #activation : {‘identity’, ‘logistic’, ‘tanh’, ‘relu’}, default ‘relu’

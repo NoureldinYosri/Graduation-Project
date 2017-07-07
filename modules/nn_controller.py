@@ -108,7 +108,7 @@ def get_som(path,som_m,som_n,surf):
 def get_clf(X,Y,hidden_layer_shape):
     print ("start training MLP")
     start_time = time.time()
-    clf = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=tuple(hidden_layer_shape), random_state=1)
+    clf = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=tuple(hidden_layer_shape), random_state=1,activation = "logistic",max_iter = 1000);
     clf.fit(X,Y)
     elapsed_time = time.time() - start_time
     minutes = elapsed_time/60
