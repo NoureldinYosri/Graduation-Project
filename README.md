@@ -1,4 +1,5 @@
 #GP 
+<title> online detection of key events in football matches </title>
 </li>
 guidlines </li>
 <ul>
