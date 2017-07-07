@@ -1,6 +1,20 @@
-#GP 
-title : online detection of key events in football matches
-</li> guidlines </li>
+<p>#GP</p> 
+</p>title : online detection of key events in football matches</p>
+<p>summary</p>
+<ul>
+	<li> we removed crowd and detected playground using image processing techinques </li>
+	<li> we detected the ball using its geometric features </li>
+	<li> we detected the players using opencv's HOG classifier (terrible accuracy) </li>
+	<li> we tracked the detected players using opencv's tracker and the "MIL" algorithm (great accuracy) </li>
+	<li> we extracted key points using SURF and cluster the desciptors using SOM </li>
+	<li> the vectors in the SOM form a kind of a visual language that allows us to make a bag of features for each image</li>
+	<li> the used SOM had a 50x50 structre so we had 2500 "words" </li>
+	<li> we collected a data set of 52000 images and labeled them </li>
+	<li> we trained five backpropagation NN each to be abel to tell whether a certain event has occured or not untill each network had an accuracy of at least 80% </li>
+	<li> we trained another network which takes the output of the previous 5 networks as input and outputs the correct label until its accuracy on testing data was 93% </li>
+	<li> experimentation using PCA showed that we can achieve the same accuracy if we project each image representation (the 2500 vector from SOM) on a 140+ dimentional space </li>
+</ul>
+</li> guidlines for GP team </li>
 <ul>
 	<li> don't push unless the whole project works correctly on your machine </li>
 	<li> don't add external library files in the project . </li>
@@ -36,4 +50,6 @@ dependencies/links:
 		<li> usage : to save models/objects to files and reading them back </li>
 		<li> link : https://pythonhosted.org/joblib/ </li>
 	</ul>
+	<li> sklearn </li>
+	<li> qt-4 </li>
 </ul>
