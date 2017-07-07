@@ -1,7 +1,6 @@
 #GP 
-<title> online detection of key events in football matches </title>
-</li>
-guidlines </li>
+title : online detection of key events in football matches
+</li> guidlines </li>
 <ul>
 	<li> don't push unless the whole project works correctly on your machine </li>
 	<li> don't add external library files in the project . </li>
